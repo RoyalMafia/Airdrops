@@ -30,7 +30,7 @@ function ENT:Draw()
 
 	cam.Start3D2D(Pos + Ang:Up() * 16.2, Ang, 0.11)
 		draw.SimpleText( "Airdrop", "rylfont1", 0, -60, Color( 255, 255, 255 ), 1, 1 ) 
-		draw.SimpleText( "Time left "..string.FormattedTime( self:Getdroplife(), "%02i:%02i" ), "royals_font_1", 0, 0, Color( 255, 255, 255 ), 1, 1 )
+		draw.SimpleText( "Time left "..string.FormattedTime( self:Getdroplife(), "%02i:%02i" ), "DermaLarge", 0, 0, Color( 255, 255, 255 ), 1, 1 )
 	cam.End3D2D()
 
 	Ang:RotateAroundAxis(Ang:Up(), 0)
@@ -38,8 +38,8 @@ function ENT:Draw()
 	Ang:RotateAroundAxis(Ang:Right(), 180 )
 
 	cam.Start3D2D(Pos + Ang:Up() * 16.2, Ang, 0.11)
-		draw.SimpleText( "Airdrop", "royals_font_1", 0, -60, Color( 255, 255, 255 ), 1, 1 ) 
-		draw.SimpleText( "Time left "..string.FormattedTime( self:Getdroplife(), "%02i:%02i" ), "royals_font_1", 0, 0, Color( 255, 255, 255 ), 1, 1 )
+		draw.SimpleText( "Airdrop", "rylfont1", 0, -60, Color( 255, 255, 255 ), 1, 1 ) 
+		draw.SimpleText( "Time left "..string.FormattedTime( self:Getdroplife(), "%02i:%02i" ), "DermaLarge", 0, 0, Color( 255, 255, 255 ), 1, 1 )
 	cam.End3D2D()
 end
 
