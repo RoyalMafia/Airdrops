@@ -115,6 +115,10 @@ local function dropmenu( id, items )
 	function clbtn:Paint(w, h)
 		draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 0, 0, 150 ) )
 
+		if clbtn:IsHovered() then
+			draw.RoundedBox( 0, 0, 0, w, h, Color( 255, 255, 255, 10 ) )
+		end
+
 		draw.SimpleText( "X", "Trebuchet24", w / 2, h / 2, Color( 0, 0, 0, 100 ), 1, 1 )
 	end
 
@@ -141,9 +145,14 @@ local function dropmenu( id, items )
 			local val = dropst.vals[ getItemVal( itemtable[i] ) ]
 			draw.RoundedBox( 0, 0, 0, w, h, col )
 
+			if id:IsHovered() then
+				draw.RoundedBox( 0, 0, 0, w, h, Color( 255, 255, 255, 50 ) )
+			end
+
 			draw.SimpleText( val, "Trebuchet18", w / 2, 10, Color( 0, 0, 0, 150 ), 1, 1 )
 			draw.SimpleText( getItemName( itemtable[i] ) or "nil" , "Trebuchet18", w / 2, h - 10, Color( 0, 0, 0, 150 ), 1, 1 )
 			draw.SimpleText( "Click to drop", "Trebuchet18", w / 2, h / 2, Color( 0, 0, 0, 150 ), 1, 1 )
+
 		end
 
 		function id:DoClick()
