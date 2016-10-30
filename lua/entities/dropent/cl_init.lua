@@ -41,10 +41,6 @@ function ENT:Draw()
 		draw.SimpleText( "Airdrop", "royals_font_1", 0, -60, Color( 255, 255, 255 ), 1, 1 ) 
 		draw.SimpleText( "Time left "..string.FormattedTime( self:Getdroplife(), "%02i:%02i" ), "royals_font_1", 0, 0, Color( 255, 255, 255 ), 1, 1 )
 	cam.End3D2D()
-
-	-- Just gonna put this here
-	--itemtable = util.JSONToTable( self:Getdropitems() )
-
 end
 
 --[[
