@@ -8,8 +8,8 @@ if SERVER then
 	include 'dropcode/cl_addpos.lua'
 	AddCSLuaFile 'dropcode/cl_addpos.lua'
 
-	include 'dropcode/sh_dropconfig.lua'
-	AddCSLuaFile 'dropcode/sh_dropconfig.lua'
+	include 'sh_dropconfig.lua'
+	AddCSLuaFile 'sh_dropconfig.lua'
 
 	include 'dropcode/sv_setupdirs.lua'
 	include 'dropcode/sv_drops.lua'
@@ -22,5 +22,6 @@ end
 if CLIENT then
 	include 'dropcode/cl_addpos.lua'
 
-	include 'dropcode/sh_dropconfig.lua'
+	include 'sh_dropconfig.lua'
 end
+
