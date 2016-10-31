@@ -173,7 +173,11 @@ local function dropmenu( id, items )
 			net.Start( "airdrop_receive" )
 				net.WriteString( dropid )
 				net.WriteInt( i, 32 )
-				net.WriteString( getItemID( itemtable[i] ) )
+				if getItemID( itemtable[i] ) != nil then
+					net.WriteString( getItemID( itemtable[i] ) )
+				else
+					net.WriteString( "" )
+				end
 			net.SendToServer()
 
 			if #itemtable == 1 then
