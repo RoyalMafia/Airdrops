@@ -65,6 +65,14 @@ local function getItemName( item )
 	end
 end
 
+local function getItemID( item )
+	for i = 1, #dropst.items do
+		if dropst.items[i].itemName == item then
+			return dropst.items[i].itemName
+		end
+	end
+end
+
 local function updateItems( dropid )
 	net.Start( "airdrop_request" )
 		net.WriteString( dropid )
@@ -108,7 +116,7 @@ local function dropmenu( id, items )
 	end
 
 	function im:Think()
-		if itemtable == 0 then
+		if #itemtable == 0 then
 			im:Close()
 		end
 	end
@@ -165,6 +173,7 @@ local function dropmenu( id, items )
 			net.Start( "airdrop_receive" )
 				net.WriteString( dropid )
 				net.WriteInt( i, 32 )
+				net.WriteString( getItemID( itemtable[i] ) )
 			net.SendToServer()
 
 			if #itemtable == 1 then

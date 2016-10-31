@@ -88,6 +88,10 @@ local function generateID()
     return id
 end
 
+local function getItems( dropid )
+	return file.Read( "airdrops/tempdrops/"..dropid..".dat", "DATA" )
+end
+
 local function checkDrop( dropid )
 	if #file.Find( "airdrops/tempdrops/"..dropid..".dat", "DATA" ) == 0 then return false else return true end
 end
@@ -95,7 +99,7 @@ end
 local function checkItem( dropid, id )
 	if id > 5 then return false end
 	if #file.Find( "airdrops/tempdrops/"..dropid..".dat", "DATA" ) == 0 then return false end
-	local tdroptable = util.JSONToTable( file.Read( "airdrops/tempdrops/"..dropid..".dat", "DATA" ) )
+	local tdroptable = util.JSONToTable( getItems( dropid ) )
 	for i = 1, #tdroptable do
 		if tdroptable[i] == tdroptable[id] then
 			return true
@@ -104,7 +108,7 @@ local function checkItem( dropid, id )
 end
 
 local function removeItem( dropid, id )
-	local tdroptable = util.JSONToTable( file.Read( "airdrops/tempdrops/"..dropid..".dat", "DATA" ) )
+	local tdroptable = util.JSONToTable( getItems( dropid ) )
 	for i = 1, #tdroptable do
 		if i == id then
 			table.remove( tdroptable, i )
@@ -122,22 +126,20 @@ local function getItemEnt( item )
 end
 
 local function spawnEnt( dropid, id )
-	local tdroptable = util.JSONToTable( file.Read( "airdrops/tempdrops/"..dropid..".dat", "DATA" ) )
+	local tdroptable = util.JSONToTable( getItems( dropid ) )
 	local item = ents.Create( getItemEnt( tdroptable[id] ) )
 	local droppos = nil
+
 	for i = 1, #drops do
 		if drops[i].dropentid == dropid then
 			droppos = drops[i].droppos
 		end
 	end
+
 	-- Don't want to try and spawn nil ents
 	if !IsValid( item ) then return end
 	item:SetPos( droppos + Vector( math.random( -60, 60 ) , math.random( -60, 60 ), 40 ) )
 	item:Spawn()
-end
-
-local function getItems( dropid )
-	return file.Read( "airdrops/tempdrops/"..dropid..".dat", "DATA" )
 end
 
 local function removeDrop( dropid )
@@ -165,6 +167,19 @@ local function setAccess( dropid )
 	end
 end
 
+local function checkItemName( dropid, itemname )
+	for i = 1, #drops do
+		if drops[i].dropentid == dropid then
+			local tdroptable = util.JSONToTable( getItems( dropid ) )
+			for x = 1, #tdroptable do
+				if tdroptable[x] == itemname then
+					return true
+				end
+			end
+		end
+	end
+end
+
 --[[
 
 	ENT THINK
@@ -175,7 +190,7 @@ function ENT:Think()
 	if self:Getdropid() != nil then
 		for i = 1, #drops do
 			if drops[i].dropentid == self:Getdropid() then
-				drops[i].droptable = self:Getdropitems()
+				drops[i].droptable = getItems( self:Getdropid() )
 				drops[i].droppos = self:GetPos()
 			end
 		end
@@ -187,14 +202,11 @@ function ENT:Think()
 			self.time = CurTime()
 		end
 	elseif self:Getdroplife() == 0 then
-		file.Delete( "airdrops/tempdrops/"..self:Getdropid()..".dat" )
 		self:Remove()
 	end
 
-	if checkDrop( self:Getdropid() ) and self:Getdropitems() != util.TableToJSON( file.Read( "airdrops/tempdrops/"..self:Getdropid()..".dat", "DATA" ) ) then
-		local tdroptable = file.Read( "airdrops/tempdrops/"..self:Getdropid()..".dat", "DATA" )
-		self:Setdropitems( tdroptable ) 
-
+	if checkDrop( self:Getdropid() ) then
+		local tdroptable = getItems( self:Getdropid() )
 		if tdroptable == "[]" then
 			self:Remove()
 		end
@@ -225,15 +237,14 @@ function ENT:Initialize()
 
 	generateItems( self.itemtable )
 
-	local jsonstring = util.TableToJSON(  self.itemtable )
-	self:Setdropitems( tostring( jsonstring ) )
+	local jsonstring = util.TableToJSON( self.itemtable )
 
 	-- This is important for serverside validation
-	file.Write( "airdrops/tempdrops/"..self:Getdropid()..".dat", self:Getdropitems() )
+	file.Write( "airdrops/tempdrops/"..self:Getdropid()..".dat", jsonstring )
 
 	local toInsert = {}
 		toInsert.dropentid  = self:Getdropid()
-		toInsert.droptable  = self:Getdropitems()
+		toInsert.droptable  = getItems( self:Getdropid() )
 		toInsert.droppos    = self:GetPos()
 		toInsert.dropaccess = false
 	table.insert( drops, toInsert )
@@ -262,12 +273,11 @@ end
 
 function ENT:AcceptInput( Name, Activator, Caller )	
 	if Name == "Use" and Caller:IsPlayer() then
-
 		setAccess( self:Getdropid() )
 
 		net.Start( "airdrop_int" )
 			net.WriteString( self:Getdropid() )
-			net.WriteString( self:Getdropitems() )
+			net.WriteString( getItems( self:Getdropid() ) )
 		net.Send( Caller )
 	end
 end
@@ -280,8 +290,10 @@ end
 
 net.Receive( "airdrop_receive", function( len, pl ) 
 	local cldropid = net.ReadString()
-	local id = net.ReadInt( 32 )
-	if checkItem( cldropid, id ) and checkAccess( cldropid ) then
+	local id       = net.ReadInt( 32 )
+	local itemid   = net.ReadString()
+
+	if checkItem( cldropid, id ) and checkAccess( cldropid ) and checkItemName( cldropid, itemid ) then
 		spawnEnt( cldropid, id )
 		removeItem( cldropid, id )
 	end
@@ -289,6 +301,7 @@ end)
 
 net.Receive( "airdrop_request", function( len, pl ) 
 	local dropid = net.ReadString()
+	
 	if checkDrop( dropid ) then
 		net.Start( "airdrop_request" )
 			net.WriteString( dropid )
