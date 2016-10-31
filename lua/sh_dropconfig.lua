@@ -11,13 +11,11 @@
                                              /$$  \ $$
                                             |  $$$$$$/
                                              \______/ 
-
 --]]---------------------------------------------------
 
 --[[------------------------------------------
 		
 	Vars
-
 --]]------------------------------------------
 
 -- Values for the drop shizzle
@@ -34,12 +32,9 @@ dropst.amount = 10
 	
 	For itemName it can be anything, just needed for the drop selection, must be
 	unique. i.e. airdrop_gun1
-
 	For itemNiceName I couldn't be fucked to work out the ents print name via
 	string, so just set that to be a nice name for the ent i.e. 'Dank Drugz'
-
 	For itemVals  5 - 1, 5 = rare - 1 = common, they are the drop chances etc.
-
 	For itemEnt that's the entity that you want it to use for the item, so make
 	sure that it's the correct entity or it won't work.
 ]]--

@@ -107,6 +107,12 @@ local function dropmenu( id, items )
 		draw.SimpleText( "Airdrop Inventory", "Trebuchet24", 5, 12.5, Color( 0, 0, 0, 100 ), 0, 1 )
 	end
 
+	function im:Think()
+		if itemtable == 0 then
+			im:Close()
+		end
+	end
+
 	local clbtn = vgui.Create( "DButton", im)
 	clbtn:SetText( "" )
 	clbtn:SetPos( im:GetWide() - 25, 0 )

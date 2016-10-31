@@ -24,4 +24,3 @@ if CLIENT then
 
 	include 'sh_dropconfig.lua'
 end
-
