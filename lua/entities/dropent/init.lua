@@ -187,26 +187,26 @@ end
 ]]--
 
 function ENT:Think()
-	if self:Getdropid() != nil then
+	if self.dropid != nil then
 		for i = 1, #drops do
-			if drops[i].dropentid == self:Getdropid() then
-				drops[i].droptable = getItems( self:Getdropid() )
+			if drops[i].dropentid == self.adropid then
+				drops[i].droptable = getItems( self.dropid )
 				drops[i].droppos = self:GetPos()
 			end
 		end
 	end
 
-	if self:Getdroplife() > 0 then
+	if self.droplife > 0 then
 		if CurTime() > self.time + 1 then
-			self:Setdroplife( self:Getdroplife() - 1 )
+			self.droplife = self.droplife - 1
 			self.time = CurTime()
 		end
-	elseif self:Getdroplife() == 0 then
+	elseif self.droplife == 0 then
 		self:Remove()
 	end
 
-	if checkDrop( self:Getdropid() ) then
-		local tdroptable = getItems( self:Getdropid() )
+	if checkDrop( self.dropid ) then
+		local tdroptable = getItems( self.dropid )
 		if tdroptable == "[]" then
 			self:Remove()
 		end
@@ -226,8 +226,11 @@ function ENT:Initialize()
 	self:PhysicsInit( SOLID_VPHYSICS )      
 	self:SetMoveType( MOVETYPE_VPHYSICS )   
 	self:SetSolid( SOLID_VPHYSICS )
-	self:Setdropid( generateID() )
-	self:Setdroplife( 300 )
+	--self:Setdropid( generateID() )
+	--self:Setdroplife( 300 )
+
+	self.droplife  = 300
+	self.dropid    = generateID()
 	self.itemtable = {}
  
     local phys = self:GetPhysicsObject()
@@ -240,11 +243,11 @@ function ENT:Initialize()
 	local jsonstring = util.TableToJSON( self.itemtable )
 
 	-- This is important for serverside validation
-	file.Write( "airdrops/tempdrops/"..self:Getdropid()..".dat", jsonstring )
+	file.Write( "airdrops/tempdrops/"..self.dropid..".dat", jsonstring )
 
 	local toInsert = {}
-		toInsert.dropentid  = self:Getdropid()
-		toInsert.droptable  = getItems( self:Getdropid() )
+		toInsert.dropentid  = self.dropid
+		toInsert.droptable  = getItems( self.dropid )
 		toInsert.droppos    = self:GetPos()
 		toInsert.dropaccess = false
 	table.insert( drops, toInsert )
@@ -259,10 +262,10 @@ end
 
 function ENT:OnRemove()
 	-- Need to remove from table
-	removeDrop( self:Getdropid() )
+	removeDrop( self.dropid )
 
 	-- If we're removed we need to delete the temp file we made
-	file.Delete( "airdrops/tempdrops/"..self:Getdropid()..".dat" )
+	file.Delete( "airdrops/tempdrops/"..self.dropid..".dat" )
 end
 
 --[[
@@ -273,11 +276,11 @@ end
 
 function ENT:AcceptInput( Name, Activator, Caller )	
 	if Name == "Use" and Caller:IsPlayer() then
-		setAccess( self:Getdropid() )
+		setAccess( self.dropid )
 
 		net.Start( "airdrop_int" )
-			net.WriteString( self:Getdropid() )
-			net.WriteString( getItems( self:Getdropid() ) )
+			net.WriteString( self.dropid )
+			net.WriteString( getItems( self.dropid ) )
 		net.Send( Caller )
 	end
 end

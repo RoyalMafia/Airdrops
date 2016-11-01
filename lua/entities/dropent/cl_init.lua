@@ -18,6 +18,20 @@ local dropid = {}
 	
 ]]--
 
+function ENT:Initialize()
+	self.droplife = 300
+	self.time     = CurTime()
+end
+
+function ENT:Think()
+	if self.droplife > 0 then
+		if CurTime() > self.time + 1 then
+			self.droplife = self.droplife - 1
+			self.time = CurTime()
+		end
+	end
+end
+
 function ENT:Draw()
 	self:DrawModel()
 
@@ -30,7 +44,7 @@ function ENT:Draw()
 
 	cam.Start3D2D(Pos + Ang:Up() * 16.2, Ang, 0.11)
 		draw.SimpleText( "Airdrop", "rylfont1", 0, -60, Color( 255, 255, 255 ), 1, 1 ) 
-		draw.SimpleText( "Time left "..string.FormattedTime( self:Getdroplife(), "%02i:%02i" ), "DermaLarge", 0, 0, Color( 255, 255, 255 ), 1, 1 )
+		draw.SimpleText( "Time left "..string.FormattedTime( self.droplife, "%02i:%02i" ), "DermaLarge", 0, 0, Color( 255, 255, 255 ), 1, 1 )
 	cam.End3D2D()
 
 	Ang:RotateAroundAxis(Ang:Up(), 0)
@@ -39,7 +53,7 @@ function ENT:Draw()
 
 	cam.Start3D2D(Pos + Ang:Up() * 16.2, Ang, 0.11)
 		draw.SimpleText( "Airdrop", "rylfont1", 0, -60, Color( 255, 255, 255 ), 1, 1 ) 
-		draw.SimpleText( "Time left "..string.FormattedTime( self:Getdroplife(), "%02i:%02i" ), "DermaLarge", 0, 0, Color( 255, 255, 255 ), 1, 1 )
+		draw.SimpleText( "Time left "..string.FormattedTime( self.droplife, "%02i:%02i" ), "DermaLarge", 0, 0, Color( 255, 255, 255 ), 1, 1 )
 	cam.End3D2D()
 end
 
