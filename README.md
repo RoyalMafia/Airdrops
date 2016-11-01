@@ -1,5 +1,5 @@
 # Gmod Airdrop Addon
-Airdrop addon created by RoyalMafia ( https://steamcommunity.com/id/royalxvi/ ) 
+Airdrop addon created by Ryl ( https://steamcommunity.com/id/royalxvi/ ) 
 
 ## Basic Info
 
