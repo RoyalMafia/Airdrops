@@ -4,20 +4,32 @@ Airdrop addon created by Ryl ( https://steamcommunity.com/id/royalxvi/ )
 ## Basic Info
 
 This is an addon which creates 'airdrops' which contain items that are defined in the config and 
-each item has a rarity defininghow likely it is to drop.
+each item has a rarity defining how likely it is to be in the drop.
 
 ## Airdrop Inventory Preview
 
-![alt tag](https://i.gyazo.com/a47b22569d75104fbc36d27307f72132.png)
+![Inventory Example](https://i.gyazo.com/a47b22569d75104fbc36d27307f72132.png)
 
-## Usage 
-- Place in addons directory
-- Setup config file in `Airdrops-master/lua`
-- Boot up server ( It will create all required files / directories on boot up )
-- Go on server and use the chat command "!dropadd" to create a drop point at where you're aiming
-- Done
+## Spawn Chance Percentages
+These may change overtime, but this is how they are now:
+- Common      - `33.333%`
+- Uncommmon   - `26.666%`
+- Unusual     - `20%`
+- Rare        - `13.333%`
+- Ultra Rare  - `6.666%`
+
+## Setting It Up
+Place in addons, then boot up server to let the addon set everything up.
+
+The config file is located in `Airdrops-master/lua`.
+It explains what everything does, so it's pretty easy to edit.
+
+Nothing else will need to be editted / changed, otherwise you could
+break the addon.
 
 ## Chat Commands ( ADMIN+ ONLY ) 
+Only the ranks defined in the config can use these commands. To edit which ranks can
+use them edit the `dropst.ranks` table. 
 - !dropadd   - Adds a drop point where the player is aiming
 - !forcedrop - Force the addon to spawn in airdrops 
 
