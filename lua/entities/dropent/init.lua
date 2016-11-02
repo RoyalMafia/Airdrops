@@ -75,7 +75,7 @@ local function generateItems( dtable )
 end
 
 local function generateID()
-	-- I fucking hate entities, and how they don't have network tables, so I made ids for table shit
+	-- Each ent has a unique ID which is used for validation
     local chars = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9","0"}
     local seed = math.randomseed( os.time() + math.random( 0, 2000 ) )
     local idtable = {}
@@ -226,8 +226,6 @@ function ENT:Initialize()
 	self:PhysicsInit( SOLID_VPHYSICS )      
 	self:SetMoveType( MOVETYPE_VPHYSICS )   
 	self:SetSolid( SOLID_VPHYSICS )
-	--self:Setdropid( generateID() )
-	--self:Setdroplife( 300 )
 
 	self.droplife  = 300
 	self.dropid    = generateID()
