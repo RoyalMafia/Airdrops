@@ -14,7 +14,15 @@ util.AddNetworkString( "airdrop_notify" )
 
 ]]--
 
-droppos = util.JSONToTable( file.Read( "airdrops/"..game.GetMap().."/spawnspos.dat", "DATA" ) )
+local droppos = {}
+
+if #file.Find( "airdrops/"..game.GetMap().."/spawnspos.dat", "DATA" ) == 0 then
+	droppos = util.JSONToTable( file.Read( "airdrops/"..game.GetMap().."/spawnspos.dat", "DATA" ) )
+else
+	timer.Simple( 5, function()  
+		droppos = util.JSONToTable( file.Read( "airdrops/"..game.GetMap().."/spawnspos.dat", "DATA" ) )
+	end)
+end
 
 --[[
 
@@ -70,9 +78,14 @@ end
 net.Receive( "airdrop_dropadd", function( len, pl ) 
 
 	if checkPlyRank( pl ) then
+		local pos = net.ReadVector()
 		local postable = util.JSONToTable( file.Read( "airdrops/"..game.GetMap().."/spawnspos.dat", "DATA" ) )
-		table.insert( postable, net.ReadVector() )
+		table.insert( postable, pos )
 		file.Write( "airdrops/"..game.GetMap().."/spawnspos.dat", util.TableToJSON( postable ) )
+
+		net.Start( "airdrop_notify" )
+			net.WriteString( "Airdrop added at: "..tostring( pos ) )
+		net.Send( pl )
 	end
 
 end)
