@@ -190,7 +190,6 @@ function ENT:Think()
 	if self.dropid != nil then
 		for i = 1, #drops do
 			if drops[i].dropentid == self.dropid then
-				drops[i].droptable = getItems( self.dropid )
 				drops[i].droppos = self:GetPos()
 			end
 		end
