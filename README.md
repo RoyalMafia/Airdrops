@@ -1,3 +1,7 @@
+# Addon is outdated & possibly broken
+I haven't updated this addon in a while and believe there are bugs, but I have been making a completely new version 
+which was started from scratch which maybe released on the Workshop & here soon.
+
 # Gmod Airdrop Addon
 Airdrop addon created by Ryl ( https://steamcommunity.com/id/royalxvi/ ) 
 
