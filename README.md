@@ -1,3 +1,7 @@
+# UPDATED VERSION
+
+https://github.com/RoyalMafia/ryls_airdrops_v2 <-- That is the updated version of this addon.
+
 # Addon is outdated & possibly broken
 I haven't updated this addon in a while and believe there are bugs, but I have been making a completely new version 
 which was started from scratch which maybe released on the Workshop & here soon.
